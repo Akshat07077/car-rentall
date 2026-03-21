@@ -64,23 +64,23 @@ function FilterPanel({ filters, onChange, onClear }: {
         </div>
       </div>
 
-      <div className="space-y-3">
+        <div className="space-y-3">
         <div className="flex justify-between items-center">
           <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Max Price / Day</Label>
           <span className="text-sm font-bold text-primary">
-            {filters.max_price && filters.max_price < 25000
+            {filters.max_price && filters.max_price < 15000
               ? `₹${filters.max_price.toLocaleString("en-IN")}`
-              : "₹25,000+"}
+              : "₹15,000+"}
           </span>
         </div>
         <input
-          type="range" min="1000" max="25000" step="500"
-          value={filters.max_price || 25000}
+          type="range" min="500" max="15000" step="250"
+          value={filters.max_price || 15000}
           onChange={(e) => onChange("max_price", parseInt(e.target.value))}
           className="w-full accent-primary"
         />
         <div className="flex justify-between text-xs text-muted-foreground">
-          <span>₹1,000</span><span>₹25,000+</span>
+          <span>₹500</span><span>₹15,000+</span>
         </div>
       </div>
 

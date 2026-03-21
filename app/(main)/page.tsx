@@ -95,7 +95,7 @@ export default function Home() {
                 <div className="absolute bottom-6 left-6 right-6 bg-background/80 backdrop-blur-md rounded-2xl p-4 border border-border/50">
                   <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-1">Now Available</p>
                   <p className="font-display font-bold text-lg">Luxury Fleet · 8 Cities</p>
-                  <p className="text-sm text-primary font-semibold">Starting ₹1,799/day</p>
+                  <p className="text-sm text-primary font-semibold">Starting ₹699/day</p>
                 </div>
               </div>
               {/* Decorative blur */}
