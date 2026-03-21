@@ -27,7 +27,7 @@ export function Navbar() {
             <div className="w-9 h-9 md:w-10 md:h-10 bg-primary text-primary-foreground rounded-xl flex items-center justify-center shadow-lg shadow-primary/25 group-hover:scale-105 transition-transform">
               <Car className="w-5 h-5 md:w-6 md:h-6" />
             </div>
-            <span className="font-display font-bold text-xl md:text-2xl tracking-tight">AutoLuxe</span>
+            <span className="font-display font-bold text-xl md:text-2xl tracking-tight">LuxeCars</span>
           </Link>
 
           <div className="hidden md:flex items-center gap-8">

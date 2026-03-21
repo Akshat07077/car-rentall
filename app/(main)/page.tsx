@@ -36,7 +36,7 @@ export default function Home() {
             {/* Left: Text */}
             <div className="relative z-10">
               <span className="inline-flex items-center rounded-full bg-primary/10 text-primary px-4 py-1.5 text-sm font-semibold mb-6 border border-primary/20">
-                🇮🇳 India&apos;s Premium Car Rental
+                🇮🇳 LuxeCars Rentals · India&apos;s Premium Fleet
               </span>
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-extrabold text-foreground leading-[1.05] tracking-tight mb-6">
                 Drive Your{" "}
@@ -191,7 +191,7 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <span className="text-primary font-semibold text-sm uppercase tracking-wider">Why Choose Us</span>
-              <h2 className="text-3xl md:text-4xl font-display font-bold mt-3 mb-6 tracking-tight">The AutoLuxe Difference</h2>
+              <h2 className="text-3xl md:text-4xl font-display font-bold mt-3 mb-6 tracking-tight">The LuxeCars Difference</h2>
               <div className="space-y-5">
                 {[
                   { icon: IndianRupee, title: "Transparent INR Pricing", desc: "No hidden charges. What you see is what you pay — all prices in Indian Rupees including GST." },

@@ -206,7 +206,7 @@ function CarForm({ car, onSuccess }: { car: CarData | null; onSuccess: () => voi
         <div className="space-y-2"><Label>Brand</Label><Input name="brand" defaultValue={car?.brand} required className="rounded-lg" /></div>
         <div className="space-y-2"><Label>Model</Label><Input name="model" defaultValue={car?.model} required className="rounded-lg" /></div>
         <div className="space-y-2"><Label>Year</Label><Input name="year" type="number" defaultValue={car?.year} required className="rounded-lg" /></div>
-        <div className="space-y-2"><Label>Price Per Day ($)</Label><Input name="pricePerDay" type="number" step="0.01" defaultValue={car?.pricePerDay} required className="rounded-lg" /></div>
+        <div className="space-y-2"><Label>Price Per Day (₹)</Label><Input name="pricePerDay" type="number" step="1" defaultValue={car?.pricePerDay} required className="rounded-lg" /></div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">

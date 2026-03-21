@@ -9,7 +9,7 @@ export function Footer() {
           <div className="col-span-1 md:col-span-2">
             <Link href="/" className="flex items-center gap-2 mb-4">
               <Car className="w-6 h-6 text-primary" />
-              <span className="font-display font-bold text-xl tracking-tight">AutoLuxe</span>
+              <span className="font-display font-bold text-xl tracking-tight">LuxeCars</span>
             </Link>
             <p className="text-muted-foreground max-w-sm mb-4">
               India&apos;s premier luxury car rental service. Drive premium vehicles across Mumbai, Delhi, Bengaluru, and 5+ more cities.
@@ -29,17 +29,17 @@ export function Footer() {
           <div>
             <h4 className="font-bold mb-4 font-display">Contact Us</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>support@autoluxe.in</li>
+              <li>support@luxecars.in</li>
               <li>+91 98765 43210</li>
               <li>Available 24/7 · Hindi & English</li>
-              <li className="pt-2">AutoLuxe Pvt. Ltd.</li>
+              <li className="pt-2">LuxeCars Rentals Pvt. Ltd.</li>
               <li>Level 5, Bandra Kurla Complex</li>
               <li>Mumbai, Maharashtra 400051</li>
             </ul>
           </div>
         </div>
         <div className="border-t border-border mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <span>&copy; {new Date().getFullYear()} AutoLuxe Rentals Pvt. Ltd. All rights reserved.</span>
+          <span>&copy; {new Date().getFullYear()} LuxeCars Rentals Pvt. Ltd. All rights reserved.</span>
           <span>Made with ❤️ in India 🇮🇳</span>
         </div>
       </div>
