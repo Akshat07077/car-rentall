@@ -28,42 +28,86 @@ export default function Home() {
 
   return (
     <div className="w-full">
-      {/* Hero */}
-      <div className="relative w-full min-h-[520px] md:h-[680px] flex items-end md:items-center overflow-hidden bg-muted">
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/20 md:bg-gradient-to-r md:from-background md:via-background/90 md:to-transparent z-10" />
-        <div className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 md:pb-0 py-20">
-          <div className="max-w-2xl">
-            <span className="inline-flex items-center rounded-full bg-primary/20 text-primary px-4 py-1.5 text-sm font-semibold mb-6">
-              🇮🇳 India&apos;s Premium Car Rental
-            </span>
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-extrabold text-foreground leading-[1.1] tracking-tight mb-6">
-              Drive Your{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">
-                Dream Car
-              </span>{" "}
-              Across India.
-            </h1>
-            <p className="text-base md:text-lg text-muted-foreground mb-10 max-w-xl leading-relaxed">
-              From Mumbai to Delhi, Bengaluru to Jaipur — explore India in style with our curated fleet of premium and luxury vehicles.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/cars">
-                <Button size="lg" className="rounded-xl px-8 h-14 text-base font-semibold shadow-xl shadow-primary/20 w-full sm:w-auto">
-                  Browse Fleet
-                </Button>
-              </Link>
-              <Link href="/register">
-                <Button size="lg" variant="outline" className="rounded-xl px-8 h-14 text-base font-semibold w-full sm:w-auto">
-                  Create Account
-                </Button>
-              </Link>
+      {/* Hero — split layout */}
+      <div className="relative w-full min-h-[580px] md:min-h-[680px] overflow-hidden bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center min-h-[580px] md:min-h-[680px] py-16 md:py-24">
+
+            {/* Left: Text */}
+            <div className="relative z-10">
+              <span className="inline-flex items-center rounded-full bg-primary/10 text-primary px-4 py-1.5 text-sm font-semibold mb-6 border border-primary/20">
+                🇮🇳 India&apos;s Premium Car Rental
+              </span>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-extrabold text-foreground leading-[1.05] tracking-tight mb-6">
+                Drive Your{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">
+                  Dream Car
+                </span>{" "}
+                Across India.
+              </h1>
+              <p className="text-base md:text-lg text-muted-foreground mb-10 max-w-lg leading-relaxed">
+                From Mumbai to Delhi, Bengaluru to Jaipur — explore India in style with our curated fleet of premium and luxury vehicles.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link href="/cars">
+                  <Button size="lg" className="rounded-xl px-8 h-14 text-base font-semibold shadow-xl shadow-primary/20 w-full sm:w-auto">
+                    Browse Fleet
+                  </Button>
+                </Link>
+                <Link href="/register">
+                  <Button size="lg" variant="outline" className="rounded-xl px-8 h-14 text-base font-semibold w-full sm:w-auto">
+                    Create Account
+                  </Button>
+                </Link>
+              </div>
+
+              {/* Quick stats */}
+              <div className="flex items-center gap-6 mt-10 pt-8 border-t border-border/50">
+                {[
+                  { value: "500+", label: "Cars" },
+                  { value: "8+", label: "Cities" },
+                  { value: "50K+", label: "Customers" },
+                ].map(({ value, label }) => (
+                  <div key={label}>
+                    <p className="text-2xl font-display font-extrabold text-primary">{value}</p>
+                    <p className="text-xs text-muted-foreground font-medium">{label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: Video */}
+            <div className="relative hidden lg:flex items-center justify-center">
+              <div className="relative w-full aspect-[9/16] max-h-[580px] rounded-3xl overflow-hidden shadow-2xl shadow-primary/10 border border-border/30">
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="w-full h-full object-cover"
+                >
+                  <source src="https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4" type="video/mp4" />
+                  <source src="https://videos.pexels.com/video-files/4763824/4763824-hd_1920_1080_25fps.mp4" type="video/mp4" />
+                </video>
+                {/* Overlay gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
+                {/* Floating badge */}
+                <div className="absolute bottom-6 left-6 right-6 bg-background/80 backdrop-blur-md rounded-2xl p-4 border border-border/50">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-1">Now Available</p>
+                  <p className="font-display font-bold text-lg">Luxury Fleet · 8 Cities</p>
+                  <p className="text-sm text-primary font-semibold">Starting ₹1,799/day</p>
+                </div>
+              </div>
+              {/* Decorative blur */}
+              <div className="absolute -top-10 -right-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-blue-400/10 rounded-full blur-3xl pointer-events-none" />
             </div>
           </div>
         </div>
       </div>
 
       {/* Features */}
-      <div className="py-14 md:py-24 bg-card border-b border-border">
+      <div className="py-14 md:py-24 bg-card border-y border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 text-center">
             {[

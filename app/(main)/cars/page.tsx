@@ -17,7 +17,16 @@ interface Filters {
   max_price?: number;
 }
 
-const INDIAN_CITIES = ["Mumbai", "Delhi", "Bengaluru", "Hyderabad", "Chennai", "Pune", "Kolkata", "Jaipur"];
+const CITIES = [
+  { name: "Mumbai", emoji: "🏙️" },
+  { name: "Delhi", emoji: "🕌" },
+  { name: "Bengaluru", emoji: "🌿" },
+  { name: "Hyderabad", emoji: "💎" },
+  { name: "Chennai", emoji: "🌊" },
+  { name: "Pune", emoji: "🏔️" },
+  { name: "Kolkata", emoji: "🎨" },
+  { name: "Jaipur", emoji: "🏯" },
+];
 
 function FilterPanel({ filters, onChange, onClear }: {
   filters: Filters;
@@ -26,29 +35,14 @@ function FilterPanel({ filters, onChange, onClear }: {
 }) {
   return (
     <div className="space-y-6">
-      <div className="space-y-3">
-        <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">City</Label>
-        <div className="relative">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Search city..." className="pl-9 rounded-xl" value={filters.location || ""} onChange={(e) => onChange("location", e.target.value || undefined)} />
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {INDIAN_CITIES.map((city) => (
-            <button
-              key={city}
-              onClick={() => onChange("location", filters.location === city ? undefined : city)}
-              className={`text-xs px-3 py-1.5 rounded-full border transition-colors font-medium ${filters.location === city ? "bg-primary text-primary-foreground border-primary" : "border-border hover:border-primary/50 hover:text-primary"}`}
-            >
-              {city}
-            </button>
-          ))}
-        </div>
-      </div>
-
       <div className="grid grid-cols-2 md:grid-cols-1 gap-4">
         <div className="space-y-3">
           <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Transmission</Label>
-          <select className="flex h-11 w-full rounded-xl border border-border/50 bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" value={filters.transmission || "all"} onChange={(e) => onChange("transmission", e.target.value === "all" ? undefined : e.target.value)}>
+          <select
+            className="flex h-11 w-full rounded-xl border border-border/50 bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+            value={filters.transmission || "all"}
+            onChange={(e) => onChange("transmission", e.target.value === "all" ? undefined : e.target.value)}
+          >
             <option value="all">Any Transmission</option>
             <option value="automatic">Automatic</option>
             <option value="manual">Manual</option>
@@ -56,7 +50,11 @@ function FilterPanel({ filters, onChange, onClear }: {
         </div>
         <div className="space-y-3">
           <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Fuel Type</Label>
-          <select className="flex h-11 w-full rounded-xl border border-border/50 bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" value={filters.fuel_type || "all"} onChange={(e) => onChange("fuel_type", e.target.value === "all" ? undefined : e.target.value)}>
+          <select
+            className="flex h-11 w-full rounded-xl border border-border/50 bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+            value={filters.fuel_type || "all"}
+            onChange={(e) => onChange("fuel_type", e.target.value === "all" ? undefined : e.target.value)}
+          >
             <option value="all">Any Fuel Type</option>
             <option value="petrol">Petrol</option>
             <option value="diesel">Diesel</option>
@@ -75,8 +73,15 @@ function FilterPanel({ filters, onChange, onClear }: {
               : "₹25,000+"}
           </span>
         </div>
-        <input type="range" min="1000" max="25000" step="500" value={filters.max_price || 25000} onChange={(e) => onChange("max_price", parseInt(e.target.value))} className="w-full accent-primary" />
-        <div className="flex justify-between text-xs text-muted-foreground"><span>₹1,000</span><span>₹25,000+</span></div>
+        <input
+          type="range" min="1000" max="25000" step="500"
+          value={filters.max_price || 25000}
+          onChange={(e) => onChange("max_price", parseInt(e.target.value))}
+          className="w-full accent-primary"
+        />
+        <div className="flex justify-between text-xs text-muted-foreground">
+          <span>₹1,000</span><span>₹25,000+</span>
+        </div>
       </div>
 
       <Button variant="outline" className="w-full rounded-xl border-dashed" onClick={onClear}>
@@ -105,13 +110,26 @@ function CarsContent() {
     Object.entries(filters).filter(([, v]) => v !== undefined).map(([k, v]) => [k, String(v)])
   ).toString();
 
+  // Fetch all cars (no filters) to get per-city counts
+  const { data: allCars } = useQuery<CarData[]>({
+    queryKey: ["cars-all"],
+    queryFn: () => apiFetch<CarData[]>("/api/cars"),
+  });
+
   const { data: cars, isLoading } = useQuery<CarData[]>({
     queryKey: ["cars", filters],
     queryFn: () => apiFetch<CarData[]>(`/api/cars${queryString ? `?${queryString}` : ""}`),
   });
 
+  const cityCount = (city: string) =>
+    allCars?.filter((c) => c.location?.toLowerCase() === city.toLowerCase()).length ?? 0;
+
   const handleChange = (key: keyof Filters, value: string | number | undefined) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const selectCity = (city: string) => {
+    setFilters((prev) => ({ ...prev, location: prev.location === city ? undefined : city }));
   };
 
   const clearFilters = () => setFilters({});
@@ -119,13 +137,69 @@ function CarsContent() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+      {/* City tabs */}
+      <div className="mb-8">
+        <h1 className="text-2xl md:text-3xl font-display font-bold tracking-tight mb-1">Browse Fleet</h1>
+        <p className="text-muted-foreground text-sm mb-5">
+          {filters.location
+            ? `Showing cars in ${filters.location}`
+            : "All cities · Select a city to filter"}
+        </p>
+        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+          <button
+            onClick={() => handleChange("location", undefined)}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-semibold whitespace-nowrap transition-all shrink-0 ${
+              !filters.location
+                ? "bg-primary text-primary-foreground border-primary shadow-md shadow-primary/20"
+                : "border-border bg-card hover:border-primary/40 hover:text-primary"
+            }`}
+          >
+            🇮🇳 All Cities
+            {allCars && (
+              <span className={`text-xs rounded-full px-1.5 py-0.5 font-bold ${!filters.location ? "bg-white/20" : "bg-muted"}`}>
+                {allCars.length}
+              </span>
+            )}
+          </button>
+          {CITIES.map((city) => {
+            const count = cityCount(city.name);
+            const active = filters.location === city.name;
+            return (
+              <button
+                key={city.name}
+                onClick={() => selectCity(city.name)}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-semibold whitespace-nowrap transition-all shrink-0 ${
+                  active
+                    ? "bg-primary text-primary-foreground border-primary shadow-md shadow-primary/20"
+                    : "border-border bg-card hover:border-primary/40 hover:text-primary"
+                }`}
+              >
+                <span>{city.emoji}</span>
+                {city.name}
+                <span className={`text-xs rounded-full px-1.5 py-0.5 font-bold ${active ? "bg-white/20" : "bg-muted"}`}>
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Mobile filter toggle */}
       <div className="md:hidden mb-6">
-        <button onClick={() => setFiltersOpen(!filtersOpen)} className="flex items-center justify-between w-full px-4 py-3 rounded-xl border border-border bg-card text-sm font-semibold">
+        <button
+          onClick={() => setFiltersOpen(!filtersOpen)}
+          className="flex items-center justify-between w-full px-4 py-3 rounded-xl border border-border bg-card text-sm font-semibold"
+        >
           <span className="flex items-center gap-2">
             <SlidersHorizontal className="w-4 h-4 text-primary" />
-            Filters
-            {activeCount > 0 && <span className="bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">{activeCount}</span>}
+            More Filters
+            {activeCount > 1 && (
+              <span className="bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                {activeCount - (filters.location ? 1 : 0)}
+              </span>
+            )}
           </span>
           {filtersOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
         </button>
@@ -137,16 +211,22 @@ function CarsContent() {
       </div>
 
       <div className="flex flex-col md:flex-row gap-8">
-        <aside className="hidden md:block w-72 shrink-0">
-          <h2 className="text-2xl font-display font-bold tracking-tight mb-6">Filters</h2>
-          <FilterPanel filters={filters} onChange={handleChange} onClear={clearFilters} />
+        {/* Sidebar */}
+        <aside className="hidden md:block w-64 shrink-0">
+          <div className="sticky top-24">
+            <h2 className="text-lg font-display font-bold tracking-tight mb-5">More Filters</h2>
+            <FilterPanel filters={filters} onChange={handleChange} onClear={clearFilters} />
+          </div>
         </aside>
 
+        {/* Grid */}
         <div className="flex-1 min-w-0">
-          <div className="mb-6 flex items-center justify-between">
-            <p className="text-muted-foreground text-sm md:text-base">
-              Showing <span className="font-bold text-foreground">{cars?.length ?? 0}</span> vehicles
-              {filters.location && <span> in <span className="font-bold text-foreground">{filters.location}</span></span>}
+          <div className="mb-5 flex items-center justify-between">
+            <p className="text-muted-foreground text-sm">
+              <span className="font-bold text-foreground">{cars?.length ?? 0}</span> vehicles found
+              {filters.location && (
+                <span> in <span className="font-bold text-foreground">{filters.location}</span></span>
+              )}
             </p>
           </div>
 
