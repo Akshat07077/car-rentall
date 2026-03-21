@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { CarCard, type CarData } from "@/components/car-card";
@@ -87,6 +87,14 @@ function FilterPanel({ filters, onChange, onClear }: {
 }
 
 export default function CarsPage() {
+  return (
+    <Suspense>
+      <CarsContent />
+    </Suspense>
+  );
+}
+
+function CarsContent() {
   const searchParams = useSearchParams();
   const [filters, setFilters] = useState<Filters>({
     location: searchParams.get("location") || undefined,

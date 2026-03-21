@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
@@ -13,6 +13,14 @@ import { ArrowLeft, ShieldCheck, Car as CarIcon, CreditCard } from "lucide-react
 import { formatINR, type CarData } from "@/components/car-card";
 
 export default function BookingPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex justify-center items-center"><Skeleton className="w-8 h-8 rounded-full" /></div>}>
+      <BookingContent />
+    </Suspense>
+  );
+}
+
+function BookingContent() {
   const { carId } = useParams<{ carId: string }>();
   const router = useRouter();
   const searchParams = useSearchParams();

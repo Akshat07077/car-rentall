@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
@@ -8,8 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Car } from "lucide-react";
 
-export default function LoginPage() {
-  const { login, user } = useAuth();
+function LoginForm() {
+  const { login } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectUrl = searchParams.get("redirect") || "/dashboard";
@@ -32,6 +32,24 @@ export default function LoginPage() {
   };
 
   return (
+    <form onSubmit={handleSubmit} className="space-y-6 mt-10">
+      <div className="space-y-2">
+        <Label htmlFor="email">Email address</Label>
+        <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="h-12 rounded-xl" placeholder="name@example.com" />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="password">Password</Label>
+        <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="h-12 rounded-xl" placeholder="••••••••" />
+      </div>
+      <Button type="submit" className="w-full h-12 rounded-xl font-bold text-base shadow-lg shadow-primary/20" disabled={isLoading}>
+        {isLoading ? "Signing in..." : "Sign in"}
+      </Button>
+    </form>
+  );
+}
+
+export default function LoginPage() {
+  return (
     <div className="min-h-[calc(100vh-5rem)] flex">
       <div className="flex-1 flex items-center justify-center p-8 bg-background">
         <div className="w-full max-w-md space-y-8">
@@ -42,36 +60,15 @@ export default function LoginPage() {
             <h1 className="text-3xl font-display font-extrabold tracking-tight">Welcome back</h1>
             <p className="text-muted-foreground mt-2">Log in to your account to continue</p>
           </div>
-
-          <form onSubmit={handleSubmit} className="space-y-6 mt-10">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email address</Label>
-              <Input
-                id="email" type="email" required
-                value={email} onChange={(e) => setEmail(e.target.value)}
-                className="h-12 rounded-xl" placeholder="name@example.com"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password" type="password" required
-                value={password} onChange={(e) => setPassword(e.target.value)}
-                className="h-12 rounded-xl" placeholder="••••••••"
-              />
-            </div>
-            <Button type="submit" className="w-full h-12 rounded-xl font-bold text-base shadow-lg shadow-primary/20" disabled={isLoading}>
-              {isLoading ? "Signing in..." : "Sign in"}
-            </Button>
-          </form>
-
+          <Suspense>
+            <LoginForm />
+          </Suspense>
           <p className="text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
             <Link href="/register" className="text-primary font-semibold hover:underline">Sign up</Link>
           </p>
         </div>
       </div>
-
       <div className="hidden lg:flex flex-1 relative bg-muted overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-background" />
         <div className="absolute bottom-12 left-12 right-12 z-10">
