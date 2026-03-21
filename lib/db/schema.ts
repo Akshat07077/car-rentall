@@ -41,6 +41,8 @@ export const bookingsTable = pgTable("bookings", {
   pickupDate: date("pickup_date").notNull(),
   returnDate: date("return_date").notNull(),
   totalPrice: numeric("total_price", { precision: 10, scale: 2 }).notNull(),
+  withDriver: boolean("with_driver").notNull().default(false),
+  driverPrice: numeric("driver_price", { precision: 10, scale: 2 }).notNull().default("0"),
   status: bookingStatusEnum("status").notNull().default("pending"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { apiFetch } from "@/lib/api";
 import { format } from "date-fns";
-import { CheckCircle2, ArrowRight, Calendar, Car as CarIcon, MapPin } from "lucide-react";
+import { CheckCircle2, ArrowRight, Calendar, Car as CarIcon, MapPin, UserCheck } from "lucide-react";
 import { formatINR } from "@/components/car-card";
 
 interface BookingDetail {
@@ -14,6 +14,8 @@ interface BookingDetail {
   pickupDate: string;
   returnDate: string;
   totalPrice: number;
+  withDriver: boolean;
+  driverPrice: number;
   status: string;
   car?: { brand: string; model: string; location: string };
 }
@@ -64,7 +66,7 @@ export default function ConfirmationPage() {
 
         <div className="bg-card text-left p-8 rounded-3xl border border-border shadow-xl mb-10">
           <h3 className="font-bold font-display text-xl mb-6 border-b border-border/50 pb-4">Reservation Details</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
             <div>
               <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-2"><CarIcon className="w-4 h-4" /> Vehicle</p>
               <p className="text-lg font-medium">{booking.car?.brand} {booking.car?.model}</p>
@@ -81,6 +83,15 @@ export default function ConfirmationPage() {
               <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-2"><Calendar className="w-4 h-4" /> Return</p>
               <p className="text-lg font-medium">{format(new Date(booking.returnDate), "MMMM d, yyyy")}</p>
             </div>
+            {booking.withDriver && (
+              <div className="sm:col-span-2">
+                <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-2"><UserCheck className="w-4 h-4" /> Chauffeur</p>
+                <p className="text-lg font-medium text-primary flex items-center gap-2">
+                  <UserCheck className="w-5 h-5" /> Professional Driver Included
+                  <span className="text-sm text-muted-foreground font-normal">(+{formatINR(booking.driverPrice)})</span>
+                </p>
+              </div>
+            )}
           </div>
           <div className="mt-8 pt-6 border-t border-border/50 flex justify-between items-center bg-muted/30 -mx-8 -mb-8 px-8 py-6 rounded-b-3xl">
             <span className="font-bold text-muted-foreground">Amount Paid</span>

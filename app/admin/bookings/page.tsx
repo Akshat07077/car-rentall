@@ -6,12 +6,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { formatINR } from "@/components/car-card";
+import { UserCheck } from "lucide-react";
 
 interface BookingRow {
   id: number;
   pickupDate: string;
   returnDate: string;
   totalPrice: number;
+  withDriver: boolean;
+  driverPrice: number;
   status: string;
   createdAt: string;
   car?: { brand: string; model: string };
@@ -63,6 +66,7 @@ export default function AdminBookingsPage() {
                 <th className="px-6 py-4">ID / Date</th>
                 <th className="px-6 py-4">Customer</th>
                 <th className="px-6 py-4">Vehicle & Dates</th>
+                <th className="px-6 py-4">Add-ons</th>
                 <th className="px-6 py-4">Total</th>
                 <th className="px-6 py-4">Status</th>
               </tr>
@@ -71,7 +75,7 @@ export default function AdminBookingsPage() {
               {isLoading ? (
                 <tr><td colSpan={5} className="p-8 text-center"><Skeleton className="h-8 w-full" /></td></tr>
               ) : bookings?.length === 0 ? (
-                <tr><td colSpan={5} className="p-12 text-center text-muted-foreground">No bookings found.</td></tr>
+                <tr><td colSpan={6} className="p-12 text-center text-muted-foreground">No bookings found.</td></tr>
               ) : bookings?.map((booking) => (
                 <tr key={booking.id} className="hover:bg-muted/30 transition-colors">
                   <td className="px-6 py-4">
@@ -87,6 +91,16 @@ export default function AdminBookingsPage() {
                     <div className="text-xs text-muted-foreground mt-1">
                       {format(new Date(booking.pickupDate), "MM/dd/yy")} - {format(new Date(booking.returnDate), "MM/dd/yy")}
                     </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    {booking.withDriver ? (
+                      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary bg-primary/10 px-2.5 py-1 rounded-full">
+                        <UserCheck className="w-3.5 h-3.5" /> Chauffeur
+                        <span className="text-muted-foreground font-normal">+{formatINR(booking.driverPrice)}</span>
+                      </span>
+                    ) : (
+                      <span className="text-xs text-muted-foreground">Self-drive</span>
+                    )}
                   </td>
                   <td className="px-6 py-4 font-bold">{formatINR(booking.totalPrice)}</td>
                   <td className="px-6 py-4">

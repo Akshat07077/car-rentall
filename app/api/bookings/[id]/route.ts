@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { getSession, formatUser } from "@/lib/auth";
 
 function formatBooking(b: typeof bookingsTable.$inferSelect) {
-  return { ...b, totalPrice: Number(b.totalPrice) };
+  return { ...b, totalPrice: Number(b.totalPrice), driverPrice: Number(b.driverPrice) };
 }
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {

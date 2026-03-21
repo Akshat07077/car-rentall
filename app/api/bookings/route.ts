@@ -4,7 +4,7 @@ import { eq, and, sql } from "drizzle-orm";
 import { getSession, formatUser } from "@/lib/auth";
 
 function formatBooking(b: typeof bookingsTable.$inferSelect) {
-  return { ...b, totalPrice: Number(b.totalPrice) };
+  return { ...b, totalPrice: Number(b.totalPrice), driverPrice: Number(b.driverPrice) };
 }
 
 function formatRow(row: { booking: typeof bookingsTable.$inferSelect; car: typeof carsTable.$inferSelect | null; user: typeof usersTable.$inferSelect | null }) {
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
     const [currentUser] = await db.select().from(usersTable).where(eq(usersTable.id, session.userId)).limit(1);
     if (!currentUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    const { carId, pickupDate, returnDate } = await req.json();
+    const { carId, pickupDate, returnDate, withDriver } = await req.json();
     if (!carId || !pickupDate || !returnDate) {
       return NextResponse.json({ error: "carId, pickupDate, and returnDate required" }, { status: 400 });
     }
@@ -73,11 +73,16 @@ export async function POST(req: NextRequest) {
     if (conflicting.length > 0) return NextResponse.json({ error: "Car is already booked for the selected dates" }, { status: 400 });
 
     const days = Math.ceil((returnD.getTime() - pickup.getTime()) / (1000 * 60 * 60 * 24));
-    const totalPrice = days * Number(car.pricePerDay);
+    const DRIVER_PRICE_PER_DAY = 999;
+    const driverPrice = withDriver ? days * DRIVER_PRICE_PER_DAY : 0;
+    const totalPrice = days * Number(car.pricePerDay) + driverPrice;
 
     const [booking] = await db.insert(bookingsTable).values({
       userId: currentUser.id, carId: Number(carId), pickupDate, returnDate,
-      totalPrice: String(totalPrice), status: "pending",
+      totalPrice: String(totalPrice),
+      withDriver: !!withDriver,
+      driverPrice: String(driverPrice),
+      status: "pending",
     }).returning();
 
     return NextResponse.json(formatBooking(booking), { status: 201 });

@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
-import { Car, Calendar, ExternalLink, Activity } from "lucide-react";
+import { Car, Calendar, ExternalLink, Activity, UserCheck } from "lucide-react";
 import { formatINR } from "@/components/car-card";
 
 interface BookingWithCar {
@@ -18,6 +18,7 @@ interface BookingWithCar {
   pickupDate: string;
   returnDate: string;
   totalPrice: number;
+  withDriver: boolean;
   status: string;
   createdAt: string;
   car?: { brand: string; model: string; imageUrl: string | null };
@@ -86,6 +87,11 @@ export default function DashboardPage() {
                       <Badge variant="outline" className={`capitalize ${getStatusClass(booking.status)}`}>
                         {booking.status}
                       </Badge>
+                      {booking.withDriver && (
+                        <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 flex items-center gap-1">
+                          <UserCheck className="w-3 h-3" /> Chauffeur
+                        </Badge>
+                      )}
                     </div>
                     <div className="grid grid-cols-2 gap-x-8 gap-y-2 mt-4 text-sm">
                       <div className="flex items-center gap-2 text-muted-foreground">
