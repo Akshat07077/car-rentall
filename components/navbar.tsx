@@ -4,7 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Car, User, LogOut, LayoutDashboard, Settings, Menu, X, Home } from "lucide-react";
+import { Car, User, LogOut, LayoutDashboard, Settings, Menu, X, Home, MessageSquare } from "lucide-react";
 import { useState } from "react";
 
 export function Navbar() {
@@ -33,6 +33,7 @@ export function Navbar() {
           <div className="hidden md:flex items-center gap-8">
             <Link href="/" className={`text-sm font-medium transition-colors hover:text-primary ${pathname === "/" ? "text-primary" : "text-muted-foreground"}`}>Home</Link>
             <Link href="/cars" className={`text-sm font-medium transition-colors hover:text-primary ${pathname === "/cars" ? "text-primary" : "text-muted-foreground"}`}>Browse Cars</Link>
+            <Link href="/contact" className={`text-sm font-medium transition-colors hover:text-primary ${pathname === "/contact" ? "text-primary" : "text-muted-foreground"}`}>Contact</Link>
           </div>
 
           <div className="flex items-center gap-2 md:gap-4">
@@ -92,6 +93,11 @@ export function Navbar() {
             <Link href="/cars" onClick={() => setMobileOpen(false)}>
               <div className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${pathname === "/cars" ? "bg-primary/10 text-primary font-semibold" : "hover:bg-muted"}`}>
                 <Car className="w-4 h-4" /> Browse Cars
+              </div>
+            </Link>
+            <Link href="/contact" onClick={() => setMobileOpen(false)}>
+              <div className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${pathname === "/contact" ? "bg-primary/10 text-primary font-semibold" : "hover:bg-muted"}`}>
+                <MessageSquare className="w-4 h-4" /> Contact
               </div>
             </Link>
             {user ? (

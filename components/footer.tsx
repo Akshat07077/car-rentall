@@ -24,6 +24,7 @@ export function Footer() {
               <li><Link href="/cars?location=Delhi" className="hover:text-primary transition-colors">Cars in Delhi</Link></li>
               <li><Link href="/cars?location=Bengaluru" className="hover:text-primary transition-colors">Cars in Bengaluru</Link></li>
               <li><Link href="/login" className="hover:text-primary transition-colors">Member Login</Link></li>
+              <li><Link href="/contact" className="hover:text-primary transition-colors">Contact Us</Link></li>
             </ul>
           </div>
           <div>
