@@ -86,15 +86,15 @@ export default function Home() {
                   playsInline
                   className="w-full h-full object-cover"
                 >
-                  <source src="https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4" type="video/mp4" />
-                  <source src="https://videos.pexels.com/video-files/4763824/4763824-hd_1920_1080_25fps.mp4" type="video/mp4" />
+                  {/* Aerial parking lot / cars video — pexels.com/video/5992517 */}
+                  <source src="https://www.pexels.com/download/video/5992517/" type="video/mp4" />
                 </video>
                 {/* Overlay gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
                 {/* Floating badge */}
                 <div className="absolute bottom-6 left-6 right-6 bg-background/80 backdrop-blur-md rounded-2xl p-4 border border-border/50">
                   <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-1">Now Available</p>
-                  <p className="font-display font-bold text-lg">Luxury Fleet · 8 Cities</p>
+                  <p className="font-display font-bold text-lg">Family & Premium Cars · 8 Cities</p>
                   <p className="text-sm text-primary font-semibold">Starting ₹699/day</p>
                 </div>
               </div>
